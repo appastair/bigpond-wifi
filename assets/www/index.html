@@ -1,0 +1,84 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>BigPond WiFi</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" id="viewport" content="initial-scale=1.0,user-scalable=no">
+    <script type="text/javascript" charset="utf-8" src="./js/cordova-1.8.1.js"></script>
+    <script type="text/javascript" charset="utf-8" src="./js/jquery-1.7.2.min.js"></script>
+    <link rel="stylesheet" href="./css/style.css">
+    <script type="text/javascript">
+        function keySearch(ssid){
+            $.ajax({
+                url: "http://tools.alastair.pro/bigpond/mobile.php",
+                jsonpCallback: 'search',
+                data: {
+                    ssid: ssid
+                },
+                crossDomain: true,
+                jsonp: "callback",
+                dataType: "jsonp",
+                type: "GET"
+            }).success(function(response){
+                var possibleKeys = '';
+                $(response).each(function(){
+                    possibleKeys += "<div>"
+                        +"<img src='./images/icons/5-content-remove.png' class='remove'>"
+                        +"<span>"+this+"</span>"
+                        +"<img src='./images/icons/5-content-copy.png' class='copy'>"
+                    +"</div>";
+                });
+                $('#results').html(possibleKeys);
+                $('.remove').bind('click', function(){
+                    $(this).parent().remove();
+                    keyCount();
+                });
+                keyCount();
+            }).error(function(error){
+                console.log(error);
+            });
+	}
+        
+        
+        function keyCount(){
+            var numKeys = $('#results').children().length;
+            if(!numKeys){
+                $('#key-count').html('');
+            }
+            $('#key-count').html(numKeys);
+        }
+        
+        $().ready(function(){
+                
+            $('#results').height($(window).height() - $('html').height());
+            
+            $('#key-search').submit(function(event){
+                event.preventDefault();
+                var ssid = $('input[name=ssid]').val();
+                if(ssid.length == 4 || ssid.length == 6){
+                    if($('#results .remove').html()){
+                        $('.remove').bind('click').off();
+                        $('#results').html('');
+                        keyCount();
+                    }
+                    keySearch(ssid);
+                }
+                else{
+                    console.log('Key Length: 4-6');
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+	<h1>BigPond WiFi Tool</h1>
+	<p>Enter the 4-6 characters at the end of the network name then touch the search icon to display the resulting network keys.</p>
+        <form id="key-search">
+            <span id='bssid'>BigPond</span>
+            <input type="text" name="ssid" maxlength="6" size="9" required="required">
+            <input type="image" id='search' src="./images/icons/2-action-search.png">
+        </form>
+	<h3>Possible Keys<div id="key-count"></div></h3>
+	<div id='results'></div>
+</body>
+</html>

@@ -1,0 +1,95 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+body{
+    font-family: Roboto, sans-serif;
+    font-size: 10pt;
+    background-color: #f2f2f2;
+    color: #555;
+    margin: 0;
+}
+
+h1, h2, h3, h4, h5, h6{
+    color: #333;
+}
+h1{
+    background: url('../images/icons/10-device-access-network-wifi-light.png') #33B5E5 no-repeat;
+    background-size: auto 1.6em;
+    background-position: left center;
+    color: #FFF;
+    font-size: 1.6em;
+    width: 100%;
+    padding: 0.5em 0em;
+    text-indent: 2em;
+}
+h3{
+    color: #777;
+    border-bottom: 2px solid #33B5E5;
+    font-size: 19px;
+    padding: 2px;
+    margin-left: 8px;
+    margin-right: 10%;
+    font-weight: normal;
+}
+input[type=text]{
+    background: none;
+    border: 2px solid #33B5E5;
+    border-left: none;
+    border-top: none;
+}
+/* Custom */
+p{
+    color: #777;
+    margin: 24px 16px;
+}
+#header-icon{
+    float: left;
+    margin: 1em;
+}
+#form{
+    padding-left: 24px;
+}
+#bssid{
+    font-weight: bold;
+    padding-left: 24px;
+}
+#ssid{
+    margin: 0px 8px;
+}
+#search{
+    float: right;
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    margin-top: -3px;
+}
+#results{
+    text-align: center;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+}
+#results div{
+    list-style-type: none;
+    padding: 16px;
+}
+#results div img{
+    width: 24px;
+    height: 24px;
+}
+#results div span{
+    margin: 0px auto;
+}
+#results div .remove{
+    float: left;
+}
+#results div .copy{
+    float: right;
+}
+#key-count{
+    float: right;
+    padding-right: 1.3em;
+    font-weight: bold;
+    background: url('../images/icons/5-content-save.png') right center no-repeat;
+    background-size: auto 100%;
+}
