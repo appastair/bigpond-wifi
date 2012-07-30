@@ -26,4 +26,5 @@
     <plugin name="Notification" value="org.apache.cordova.Notification"/>
     <plugin name="Storage" value="org.apache.cordova.Storage"/>
     <plugin name="FileTransfer" value="org.apache.cordova.FileTransfer"/>
+    <plugin name="Share" value="com.schaul.plugins.share.Share"/>
 </plugins>

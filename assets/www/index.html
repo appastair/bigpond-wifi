@@ -6,15 +6,16 @@
     <meta name="viewport" id="viewport" content="initial-scale=1.0,user-scalable=no">
     <script type="text/javascript" charset="utf-8" src="./js/cordova-1.8.1.js"></script>
     <script type="text/javascript" charset="utf-8" src="./js/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="./js/share.js"></script>
     <link rel="stylesheet" href="./css/style.css">
     <script type="text/javascript">
-        function keySearch(ssid){
+        function keySearch(essid){
             $('#results').html("<img id='loading' src='./images/icons/1-navigation-refresh.png'>");
             $.ajax({
                 url: "http://tools.alastair.pro/bigpond/mobile.php",
                 jsonpCallback: 'search',
                 data: {
-                    ssid: ssid
+                    ssid: essid
                 },
                 crossDomain: true,
                 jsonp: "callback",
@@ -30,7 +31,7 @@
                     +"</div>";
                 });
                 $('#key-count').show();
-                $('#export').show();
+                $('#export').attr('onclick',"exportKeys('"+essid+"');").show();
                 $('#results').html(possibleKeys);
                 $('.remove').bind('click', function(){
                     $(this).parent().remove();
@@ -53,26 +54,44 @@
                 $('#key-count').text(numKeys);
             }
         }
-        function exportKeys(){
-            var keys = [];
+        
+        function exportKeys(essid){
+            //var keys = [];    //JSON
+            var keys = '';      //Plain-text
             $($('#results').find('span')).each(function(){
-                keys.push($(this).text());
+                //keys.push($(this).text());    //JSON
+                keys += $(this).text()+'\n';    //Plain-text
             });
-            return keys;
+            
+            window.plugins.share.show({
+                subject: 'Possible WPA Keys: BigPond'+essid,
+                text: "//BigPond"+essid+"\n\n"
+                    +keys+"\n"
+                    +"//BigPond-WiFi for Android\n"
+                    +"//https://github.com/AlastairPro/bigpond-wifi\n"
+                    +"//http://tools.alastair.pro/bigpond/"
+            },
+            function(success){
+                console.log(success);
+            },
+            function(error){
+                console.log(error);
+                alert(error);
+            });
         }
         
         $().ready(function(){
             $('#results').height($(window).height() - $('html').height());
             $('#key-search').submit(function(event){
                 event.preventDefault();
-                var ssid = $('input[name=ssid]').val();
-                if(ssid.length == 4 || ssid.length == 6){
+                var essid = $('input[name=essid]').val();
+                if(essid.length == 4 || essid.length == 6){
                     if($('#results .remove').html()){
                         $('.remove').bind('click').off();
                         $('#results').html('');
                         keyCount();
                     }
-                    keySearch(ssid);
+                    keySearch(essid);
                 }
                 else{
                     console.log('Key Length: 4-6');
@@ -87,12 +106,12 @@
         For Example, if your network is named <strong>BigPond1234AB</strong>, insert <strong>1234AB</strong>.</p>
         
         <form id="key-search">
-            <span id='bssid'>BigPond</span>
-            <input type="text" name="ssid" maxlength="6" size="9" required="required">
+            <span id='essid'>BigPond</span>
+            <input type="text" name="essid" autocomplete="false" maxlength="6" size="6" required="required">
             <input type="image" id='search' src="./images/icons/2-action-search.png">
         </form>
         
-	<img id="export" src="./images/icons/5-content-save.png">
+	<img id="export" onClick="" src="./images/icons/5-content-save.png">
         <div id="key-count"></div>
         <h3>Possible Keys</h3>
 	<div id='results'></div>
