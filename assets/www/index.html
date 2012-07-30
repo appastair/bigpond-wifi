@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="./css/style.css">
     <script type="text/javascript">
         function keySearch(ssid){
+            $('#results').html("<img id='loading' src='./images/icons/1-navigation-refresh.png'>");
             $.ajax({
                 url: "http://tools.alastair.pro/bigpond/mobile.php",
                 jsonpCallback: 'search',
@@ -28,6 +29,8 @@
                         +"<img src='./images/icons/5-content-copy.png' class='copy'>"
                     +"</div>";
                 });
+                $('#key-count').show();
+                $('#export').show();
                 $('#results').html(possibleKeys);
                 $('.remove').bind('click', function(){
                     $(this).parent().remove();
@@ -43,15 +46,23 @@
         function keyCount(){
             var numKeys = $('#results').children().length;
             if(!numKeys){
-                $('#key-count').html('');
+                $('#key-count').hide();
+                $('#export').hide();
             }
-            $('#key-count').html(numKeys);
+            else{
+                $('#key-count').text(numKeys);
+            }
+        }
+        function exportKeys(){
+            var keys = [];
+            $($('#results').find('span')).each(function(){
+                keys.push($(this).text());
+            });
+            return keys;
         }
         
         $().ready(function(){
-                
             $('#results').height($(window).height() - $('html').height());
-            
             $('#key-search').submit(function(event){
                 event.preventDefault();
                 var ssid = $('input[name=ssid]').val();
@@ -72,13 +83,18 @@
 </head>
 <body>
 	<h1>BigPond WiFi Tool</h1>
-	<p>Enter the 4-6 characters at the end of the network name then touch the search icon to display the resulting network keys.</p>
+	<p>Enter the 4 or 6 characters at the end of the network name then touch the search icon to display the resulting network keys. 
+        For Example, if your network is named <strong>BigPond1234AB</strong>, insert <strong>1234AB</strong>.</p>
+        
         <form id="key-search">
             <span id='bssid'>BigPond</span>
             <input type="text" name="ssid" maxlength="6" size="9" required="required">
             <input type="image" id='search' src="./images/icons/2-action-search.png">
         </form>
-	<h3>Possible Keys<div id="key-count"></div></h3>
+        
+	<img id="export" src="./images/icons/5-content-save.png">
+        <div id="key-count"></div>
+        <h3>Possible Keys</h3>
 	<div id='results'></div>
 </body>
 </html>
